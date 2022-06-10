@@ -111,3 +111,19 @@ def s3_download(bucket, key):
     else:
         logger.info(f"{key} downloaded to {local_path}")
         return local_path
+
+
+def s3_upload(bucket, key, local_path):
+    logger.info(f's3_upload("{bucket}", "{key}", "{local_path}") called')
+
+    s = boto3.session.Session()
+    c = s.resource("s3")
+    logger.info(f"boto3 s3 client created")
+
+    try:
+        c.Bucket(bucket).upload_file(local_path, key)
+    except botocore.exceptions.ClientError as e:
+        logger.exception("error while loading the file to s3")
+        raise e
+    else:
+        logger.info(f"{local_path} uploaded to {bucket}/{key}")
