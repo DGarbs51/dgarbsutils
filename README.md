@@ -7,11 +7,11 @@ I found myself using the same code over and over across projects so I created a 
 ## Install
 
 ```bash
-pip install dgutils
+pip install dgarbsutils
 ```
 
 ## Usage
 
 ```python
-from dgutils import utils, awsUtils
+from dgarbsutils import utils, awsUtils
 ```
