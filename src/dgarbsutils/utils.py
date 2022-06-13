@@ -29,9 +29,9 @@ def make_json_from_csv(file, delimiter):
     logger.debug(f"make_json_from_csv('{file}', '{delimiter}') called")
 
     # open file and read in as csv
-    with open(file) as f:
-        csv_reader = csv.DictReader(f, delimiter=delimiter)
-        # loop through each row and convert to json objects in an array
-        json = [rows for rows in csv_reader]
+    f = open(file, "r")
+    csv_reader = csv.DictReader(f, delimiter=delimiter)
+    # loop through each row and convert to json objects in an array
+    json = [rows for rows in csv_reader]
 
     return json
