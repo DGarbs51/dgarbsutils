@@ -6,6 +6,7 @@ class TestUtils(unittest.TestCase):
     """Test suite for the utils library"""
 
     def test_get_content_type(self):
+        """tests the get_content_type function"""
         self.assertEqual(
             utils.get_content_type("xlsx"), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
@@ -16,6 +17,7 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(utils.get_content_type("txt"), None)
 
     def test_make_json_from_csv(self):
+        """tests the make_json_from_csv function"""
         self.assertEqual(
             utils.make_json_from_csv("tests/test_data/test_data.csv", ","),
             [

@@ -6,6 +6,7 @@ logger = logging.getLogger()
 
 
 def get_content_type(extension):
+    """gets the content type for a file extension"""
     logger.debug(f"get_content_type('{extension}') called")
 
     if extension == "xlsx":
@@ -26,6 +27,7 @@ def get_content_type(extension):
 
 
 def make_json_from_csv(file, delimiter):
+    """makes a json list from a csv file"""
     logger.debug(f"make_json_from_csv('{file}', '{delimiter}') called")
 
     if file.split(".")[-1] not in [".txt", ".csv", ".ppe"]:
