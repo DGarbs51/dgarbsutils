@@ -36,7 +36,7 @@ def sqs_delete_message(receipt_handle):
 
 
 def sqs_send_message(body):
-    logger.info(f'send_sqs_message("body") called')
+    logger.debug(f'send_sqs_message("body") called')
 
     # establich a boto3 client for SQS
     s = boto3.session.Session()
@@ -56,6 +56,8 @@ def sqs_send_message(body):
 
 
 def secrets_manager_get_secret(secret):
+    logger.debug(f'secrets_manager_get_secret("{secret}") called')
+
     secret_name = secret
 
     s = boto3.session.Session()
@@ -92,7 +94,7 @@ def secrets_manager_get_secret(secret):
 
 
 def s3_download(bucket, key):
-    logger.info(f's3_download("{bucket}", "{key}") called')
+    logger.debug(f's3_download("{bucket}", "{key}") called')
 
     s = boto3.session.Session()
     c = s.resource("s3")
@@ -114,7 +116,7 @@ def s3_download(bucket, key):
 
 
 def s3_upload(bucket, key, local_path):
-    logger.info(f's3_upload("{bucket}", "{key}", "{local_path}") called')
+    logger.debug(f's3_upload("{bucket}", "{key}", "{local_path}") called')
 
     s = boto3.session.Session()
     c = s.resource("s3")
