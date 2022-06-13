@@ -37,12 +37,12 @@ def sqs_delete_message(receipt_handle):
 
 
 def sqs_send_message(body):
-    logger.debug(f'send_sqs_message("body") called')
+    logger.debug('send_sqs_message("body") called')
 
     # establich a boto3 client for SQS
     s = boto3.session.Session()
     c = s.client("sqs")
-    logger.info(f"boto3 sqs client created")
+    logger.info("boto3 sqs client created")
 
     try:
         # send the message to the SQS Queue
@@ -53,7 +53,7 @@ def sqs_send_message(body):
         else:
             raise e
     else:
-        logger.info(f"sqs message sent")
+        logger.info("sqs message sent")
 
 
 def secrets_manager_get_secret(secret):
@@ -66,7 +66,7 @@ def secrets_manager_get_secret(secret):
         service_name="secretsmanager",
         region_name=os.environ["AWS_REGION"],
     )
-    logging.info(f"boto3 secretsmanager client created")
+    logging.info("boto3 secretsmanager client created")
 
     try:
         get_secret_value_response = c.get_secret_value(SecretId=secret_name)
@@ -100,7 +100,7 @@ def s3_download(bucket, key):
 
     s = boto3.session.Session()
     c = s.resource("s3")
-    logger.info(f"boto3 s3 client created")
+    logger.info("boto3 s3 client created")
 
     local_path = tempfile.TemporaryFile()
 
@@ -121,7 +121,7 @@ def s3_upload(bucket, key, local_path):
 
     s = boto3.session.Session()
     c = s.resource("s3")
-    logger.info(f"boto3 s3 client created")
+    logger.info("boto3 s3 client created")
 
     try:
         c.Bucket(bucket).upload_file(local_path, key)
