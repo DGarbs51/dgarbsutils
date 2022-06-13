@@ -30,7 +30,7 @@ def make_json_from_csv(file, delimiter):
     """makes a json list from a csv file"""
     logger.debug(f"make_json_from_csv('{file}', '{delimiter}') called")
 
-    if file.split(".")[-1] not in ["txt", "csv", "ppe"]:
+    if get_file_extension(file) not in ["txt", "csv", "ppe"]:
         message = f"file {file} is not a csv, txt, or ppe file"
         logger.error(message)
         raise Exception(message)
@@ -42,3 +42,12 @@ def make_json_from_csv(file, delimiter):
     json = list(csv_reader)
 
     return json
+
+
+def get_file_extension(file):
+    """gets the file extension"""
+    logger.debug(f"get_file_extension('{file}') called")
+
+    extension = file.split(".")[-1]
+
+    return extension
