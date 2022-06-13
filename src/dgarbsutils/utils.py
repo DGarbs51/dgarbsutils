@@ -28,6 +28,11 @@ def get_content_type(extension):
 def make_json_from_csv(file, delimiter):
     logger.debug(f"make_json_from_csv('{file}', '{delimiter}') called")
 
+    if file.split(".")[-1] not in [".txt", ".csv", ".ppe"]:
+        message = f"file {file} is not a csv, txt, or ppe file"
+        logger.error(message)
+        raise Exception(message)
+
     # open file and read in as csv
     f = open(file, "r")
     csv_reader = csv.DictReader(f, delimiter=delimiter)
