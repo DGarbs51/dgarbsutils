@@ -8,7 +8,8 @@ class TestUtils(unittest.TestCase):
     def test_get_content_type(self):
         """tests the get_content_type function"""
         self.assertEqual(
-            utils.get_content_type("xlsx"), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            utils.get_content_type("xlsx"),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
         self.assertEqual(utils.get_content_type("png"), "image/png")
         self.assertEqual(utils.get_content_type("jpg"), "image/jpeg")
