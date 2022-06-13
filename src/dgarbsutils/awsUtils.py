@@ -1,11 +1,9 @@
 import os
-import uuid
 import boto3
 import logging
 import botocore
 import tempfile
 from pathlib import Path
-from urllib.parse import unquote_plus
 
 # declare the logging object
 logger = logging.getLogger()
