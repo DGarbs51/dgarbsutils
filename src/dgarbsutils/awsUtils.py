@@ -3,6 +3,7 @@ import uuid
 import boto3
 import logging
 import botocore
+import tempfile
 from pathlib import Path
 from urllib.parse import unquote_plus
 
@@ -84,7 +85,8 @@ def secrets_manager_get_secret(secret):
             raise e
     else:
         # Secrets Manager decrypts the secret value using the associated KMS CMK
-        # Depending on whether the secret was a string or binary, only one of these fields will be populated
+        # Depending on whether the secret was a string or binary
+        # only one of these fields will be populated
         if "SecretString" in get_secret_value_response:
             text_secret_data = get_secret_value_response["SecretString"]
             return text_secret_data
@@ -100,8 +102,7 @@ def s3_download(bucket, key):
     c = s.resource("s3")
     logger.info(f"boto3 s3 client created")
 
-    tmpkey = unquote_plus(key).replace("/", "")
-    local_path = f"/tmp/{uuid.uuid4()}{tmpkey}"
+    local_path = tempfile.TemporaryFile()
 
     try:
         c.Bucket(bucket).download_file(key, local_path)
