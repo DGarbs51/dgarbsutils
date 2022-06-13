@@ -91,6 +91,8 @@ def secrets_manager_get_secret(secret):
         binary_secret_data = get_secret_value_response["SecretBinary"]
         return binary_secret_data
 
+    return None
+
 
 def s3_download(bucket, key):
     logger.debug(f's3_download("{bucket}", "{key}") called')
@@ -111,6 +113,8 @@ def s3_download(bucket, key):
     else:
         logger.info(f"{key} downloaded to {local_path}")
         return local_path
+
+    return None
 
 
 def s3_upload(bucket, key, local_path):
