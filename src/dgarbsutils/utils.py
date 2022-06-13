@@ -32,6 +32,6 @@ def make_json_from_csv(file, delimiter):
     f = open(file, "r")
     csv_reader = csv.DictReader(f, delimiter=delimiter)
     # loop through each row and convert to json objects in an array
-    json = [rows for rows in csv_reader]
+    json = list(csv_reader)
 
     return json
