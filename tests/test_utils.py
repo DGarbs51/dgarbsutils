@@ -3,6 +3,8 @@ from src.dgarbsutils import utils
 
 
 class TestUtils(unittest.TestCase):
+    """Test suite for the utils library"""
+
     def test_get_content_type(self):
         self.assertEqual(
             utils.get_content_type("xlsx"), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
