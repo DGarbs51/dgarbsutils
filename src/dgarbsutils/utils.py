@@ -10,9 +10,7 @@ def get_content_type(extension):
     logger.debug(f"get_content_type('{extension}') called")
 
     if extension == "xlsx":
-        content_type = (
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+        content_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     elif extension == "png":
         content_type = "image/png"
     elif extension == "jpg":
@@ -32,7 +30,7 @@ def make_json_from_csv(file, delimiter):
     """makes a json list from a csv file"""
     logger.debug(f"make_json_from_csv('{file}', '{delimiter}') called")
 
-    if file.split(".")[-1] not in [".txt", ".csv", ".ppe"]:
+    if file.split(".")[-1] not in ["txt", "csv", "ppe"]:
         message = f"file {file} is not a csv, txt, or ppe file"
         logger.error(message)
         raise Exception(message)
