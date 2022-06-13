@@ -74,13 +74,13 @@ def secrets_manager_get_secret(secret):
         if e.response["Error"]["Code"] == "ResourceNotFoundException":
             logger.error(f"The requested secret {secret_name} was not found")
         elif e.response["Error"]["Code"] == "InvalidRequestException":
-            logger.error("The request was invalid due to:", e)
+            logger.error(f"The request was invalid due to: {e}")
         elif e.response["Error"]["Code"] == "InvalidParameterException":
-            logger.error("The request had invalid params:", e)
+            logger.error(f"The request had invalid params: {e}")
         elif e.response["Error"]["Code"] == "DecryptionFailure":
-            logger.error("The requested secret can't be decrypted using the provided KMS key:", e)
+            logger.error(f"The requested secret can't be decrypted using the provided KMS key: {e}")
         elif e.response["Error"]["Code"] == "InternalServiceError":
-            logger.error("An error occurred on service side:", e)
+            logger.error(f"An error occurred on service side: {e}")
         else:
             raise e
     else:
