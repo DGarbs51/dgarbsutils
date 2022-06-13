@@ -3,9 +3,6 @@ from src.dgarbsutils import utils
 
 
 class TestUtils(unittest.TestCase):
-    def test_upper(self):
-        self.assertEqual("foo".upper(), "FOO")
-
     def test_get_content_type(self):
         self.assertEqual(
             utils.get_content_type("xlsx"), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -15,6 +12,37 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(utils.get_content_type("jpeg"), "image/jpeg")
         self.assertEqual(utils.get_content_type("pdf"), "application/pdf")
         self.assertEqual(utils.get_content_type("txt"), None)
+
+    def test_make_json_from_csv(self):
+        self.assertEqual(
+            utils.make_json_from_csv("tests/test_data/test_data.csv", ","),
+            [
+                {
+                    "id": "1",
+                    "name": "John",
+                    "age": "25",
+                    "city": "New York",
+                    "state": "NY",
+                    "zip": "10001",
+                    "country": "USA",
+                    "email": "john@gmail.com",
+                }
+            ],
+        )
+        self.assertNotEqual(
+            utils.make_json_from_csv("tests/test_data/test_data.csv", ","),
+            [
+                {
+                    "id": "1",
+                    "age": "25",
+                    "city": "New York",
+                    "state": "NY",
+                    "zip": "10001",
+                    "country": "USA",
+                    "email": "john@gmail.com",
+                }
+            ],
+        )
 
 
 if __name__ == "__main__":
