@@ -1,9 +1,9 @@
 import os
 import boto3
-import utils
 import logging
 import botocore
 import tempfile
+from . import utils
 from pathlib import Path
 
 # declare the logging object
@@ -106,7 +106,7 @@ def s3_download(bucket, key):
     c = s.resource("s3")
     logger.info("boto3 s3 client created")
 
-    temp_file = tempfile.NamedTemporaryFile(suffix=utils.get_file_extension(key))
+    temp_file = tempfile.NamedTemporaryFile(suffix=f".{utils.get_file_extension(key)}", delete=False)
     local_path = temp_file.name
 
     try:
@@ -119,8 +119,7 @@ def s3_download(bucket, key):
     else:
         logger.info(f"{key} downloaded to {local_path}")
         return local_path
-    finally:
-        temp_file.close()
+
     return None
 
 
