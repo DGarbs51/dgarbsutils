@@ -10,7 +10,9 @@ def get_content_type(extension):
     logger.debug(f"get_content_type('{extension}') called")
 
     if extension == "xlsx":
-        content_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        content_type = (
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
     elif extension == "png":
         content_type = "image/png"
     elif extension == "jpg":
