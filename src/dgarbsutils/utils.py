@@ -2,8 +2,7 @@ import csv
 import logging
 
 # declare the logging object
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger = logging.getLogger("utils").addHandler(logging.NullHandler())
 
 
 def get_content_type(extension):

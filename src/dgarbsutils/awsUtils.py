@@ -7,8 +7,7 @@ from . import utils
 from pathlib import Path
 
 # declare the logging object
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger = logging.getLogger("awsUtils").addHandler(logging.NullHandler())
 
 # get working directory to reference relative files
 path = Path(__file__).parent
