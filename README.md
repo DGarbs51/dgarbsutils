@@ -15,3 +15,16 @@ pip install dgarbsutils
 ```python
 from dgarbsutils import utils, awsUtils
 ```
+
+## Build
+
+```bash
+python -m build
+```
+
+## Upload
+
+```bash
+python3 -m twine upload --repository pypi dist/*
+python3 -m twine upload --repository nexus dist/*
+```
