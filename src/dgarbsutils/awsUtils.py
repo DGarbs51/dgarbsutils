@@ -7,7 +7,8 @@ from . import utils
 from pathlib import Path
 
 # declare the logging object
-logger = logging.getLogger().setLevel(logging.INFO)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 # get working directory to reference relative files
 path = Path(__file__).parent
@@ -68,7 +69,7 @@ def secrets_manager_get_secret(secret):
         service_name="secretsmanager",
         region_name=os.environ["AWS_REGION"],
     )
-    logging.info("boto3 secretsmanager client created")
+    logger.info("boto3 secretsmanager client created")
 
     try:
         get_secret_value_response = c.get_secret_value(SecretId=secret_name)
