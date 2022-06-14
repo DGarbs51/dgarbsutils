@@ -7,7 +7,7 @@ from . import utils
 from pathlib import Path
 
 # declare the logging object
-logger = logging.getLogger()
+logger = logging.getLogger().setLevel(logging.INFO)
 
 # get working directory to reference relative files
 path = Path(__file__).parent
