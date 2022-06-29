@@ -4,15 +4,49 @@ import logging
 import botocore
 import tempfile
 from . import utils
-from pathlib import Path
 
 # declare the logging object
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# get working directory to reference relative files
-path = Path(__file__).parent
-logger.debug(f"path: {path}")
+
+def dynamodb_generate_json_from_csv_in_s3(bucket, key, delimiter=","):
+    """takes a bucket and key and returns a dynamodb json formatted payload"""
+    logger.debug(f"")
+
+    file = s3_download(bucket, key)
+    logger.info(f"file: {file}")
+    data = utils.make_json_from_csv(file, delimiter)
+    logger.debug(f"data: {data}")
+    keys = list(data[0])
+    logger.debug(f"keys: {keys}")
+
+    output = []
+    for row in data:
+        logger.debug(f"row: {row}")
+        item = {}
+        for key in keys:
+            logger.debug(f"key: {key}")
+            if " ".join(row[key].split()) == "":
+                item[key] = {"NULL": True}
+                continue
+            item[key] = {"S": " ".join(row[key].split())}
+            logger.debug(f"item['{key}']: {item[key]}")
+        output.append(item)
+        logger.debug(f"item: {item}")
+
+    os.remove(file)
+    return output
+
+
+def dynamodb_add_nested_json(pk_name, pk_value, data):
+    """generates the nested data to add to a dynamodb item"""
+    output = []
+    for row in data:
+        if row[pk_name]["S"] == pk_value:
+            output.append({"M": row})
+
+    return output
 
 
 def sqs_delete_message(receipt_handle):
