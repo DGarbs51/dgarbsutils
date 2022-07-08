@@ -11,9 +11,7 @@ def get_content_type(extension):
     logger.debug(f"get_content_type('{extension}') called")
 
     if extension == "xlsx":
-        content_type = (
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+        content_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     elif extension == "png":
         content_type = "image/png"
     elif extension == "jpg":
@@ -29,8 +27,25 @@ def get_content_type(extension):
     return content_type
 
 
+def make_csv_from_json(file, data, delimiter=None, keys=None):
+    """makes a csv file from a json string"""
+    logger.debug(f"make_csv_from_json('{file}','{data}','{delimiter}','{keys}') called")
+
+    if not keys:
+        keys = data[0].keys()
+    if not delimiter:
+        delimiter = "|"
+
+    with open(file, "w") as f:
+        w = csv.DictWriter(f, fieldnames=keys, delimiter=delimiter)
+        w.writeheader()
+        w.writerows(data)
+
+    f.close()
+
+
 def make_json_from_csv(file, delimiter):
-    """makes a json list from a csv file"""
+    """makes a json string from a csv file"""
     logger.debug(f"make_json_from_csv('{file}', '{delimiter}') called")
 
     if get_file_extension(file) not in ["txt", "csv", "ppe"]:
