@@ -43,6 +43,8 @@ def make_csv_from_json(file, data, delimiter=None, keys=None):
 
     f.close()
 
+    return file, delimiter
+
 
 def make_json_from_csv(file, delimiter):
     """makes a json string from a csv file"""
