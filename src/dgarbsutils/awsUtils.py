@@ -54,7 +54,6 @@ def dynamodb_format_json(data):
     output = {}
     keys = list(data.keys())
     for key in keys:
-        print(data[key])
         output[key] = {dynamodb_translate_data_type(data[key]): data[key]}
     return output
 
