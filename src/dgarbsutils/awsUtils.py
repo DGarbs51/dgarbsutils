@@ -29,23 +29,39 @@ def dynamodb_generate_json_from_csv_in_s3(bucket, key, delimiter=","):
     return output
 
 def dynamodb_translate_data_type(data):
+
     data_type = str(type(data))
 
     if data_type == "<class 'str'>":
         if " ".join(data.split()) == "":
-            return "NULL"
-        return "S"
+            return {"NULL": True}
+        return {"S": " ".join(data.split())}
     if data_type in ["<class 'int'>", "<class 'float'>", "<class 'complex'>"]:
-        return "N"
+        return {"N": data}
     if data_type == "<class 'list'>":
-        return "L"
+        return {"L": [dynamodb_translate_data_type(item) for item in data]}
     if data_type == "<class 'dict'>":
-        return "M"
+        return {"M": {key: dynamodb_translate_data_type(value) for key, value in data.items()}}
     if data_type == "<class 'bool'>":
-        return "BOOL"
+        return {"BOOL": data}
     if data_type == "<class 'NoneType'>":
-        return "NULL"
+        return {"NULL": True}
 
+def dynamodb_put_item(table_name, data):
+    """puts an item to dynamodb"""
+    logger.debug(f'dynamodb_put_item("{table_name}", "{data}") called')
+
+    s = boto3.session.Session()
+    c = s.client("dynamodb")
+    logger.info("boto3 dynamodb client created")
+
+    try:
+        c.put_item(Table=table_name,Item=data)
+    except botocore.exceptions.ClientError as e:
+        logger.exception("error while putting the item to dynamodb")
+        raise e
+    else:
+        logger.info(f"{data} put to {table_name}")
 
 def dynamodb_format_json(data):
     """formats the dynamodb json"""
@@ -54,7 +70,7 @@ def dynamodb_format_json(data):
     output = {}
     keys = list(data.keys())
     for key in keys:
-        output[key] = {dynamodb_translate_data_type(data[key]): data[key]}
+        output[key] = dynamodb_translate_data_type(data[key])
     return output
 
 def dynamodb_add_nested_json(pk_name, pk_value, data):
