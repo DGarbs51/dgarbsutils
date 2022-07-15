@@ -105,7 +105,7 @@ def sqs_delete_message(receipt_handle,queue_url):
         logger.info(f"sqs message {receipt_handle} deleted")
 
 
-def sqs_send_message(body,queue_url):
+def sqs_send_message(body,queue_url,attributes=None):
     """sends a message to the SQS queue"""
     logger.debug('send_sqs_message("body") called')
 
@@ -116,7 +116,7 @@ def sqs_send_message(body,queue_url):
 
     try:
         # send the message to the SQS Queue
-        c.send_message(QueueUrl=queue_url, MessageBody=body)
+        c.send_message(QueueUrl=queue_url, MessageBody=body, MessageAttributes=attributes)
     except botocore.exceptions.ClientError as e:
         if e.response["Error"]["Code"] == "AWS.SimpleQueueService.NonExistentQueue":
             logger.error(f"The queue {queue_url} does not exist")
