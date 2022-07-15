@@ -83,7 +83,7 @@ def dynamodb_add_nested_json(pk_name, pk_value, data):
     return output
 
 
-def sqs_delete_message(receipt_handle):
+def sqs_delete_message(receipt_handle,queue_url):
     """deletes a message from the SQS queue"""
     logger.debug(f"sqs_delete_message('{receipt_handle}') called")
 
@@ -95,17 +95,17 @@ def sqs_delete_message(receipt_handle):
 
     # delete the message that has been processed
     try:
-        c.delete_message(QueueUrl=os.environ["SQS_QUEUE_URL"], ReceiptHandle=receipt_handle)
+        c.delete_message(QueueUrl=queue_url, ReceiptHandle=receipt_handle)
     except botocore.exceptions.ClientError as e:
         if e.response["Error"]["Code"] == "AWS.SimpleQueueService.NonExistentQueue":
-            logger.error(f"The queue {os.environ['SQS_QUEUE_URL']} does not exist")
+            logger.error(f"The queue {queue_url} does not exist")
         else:
             raise e
     else:
         logger.info(f"sqs message {receipt_handle} deleted")
 
 
-def sqs_send_message(body):
+def sqs_send_message(body,queue_url):
     """sends a message to the SQS queue"""
     logger.debug('send_sqs_message("body") called')
 
@@ -116,10 +116,10 @@ def sqs_send_message(body):
 
     try:
         # send the message to the SQS Queue
-        c.send_message(QueueUrl=os.environ["SQS_QUEUE_URL"], MessageBody=body)
+        c.send_message(QueueUrl=queue_url, MessageBody=body)
     except botocore.exceptions.ClientError as e:
         if e.response["Error"]["Code"] == "AWS.SimpleQueueService.NonExistentQueue":
-            logger.error(f"The queue {os.environ['SQS_QUEUE_URL']} does not exist")
+            logger.error(f"The queue {queue_url} does not exist")
         else:
             raise e
     else:
