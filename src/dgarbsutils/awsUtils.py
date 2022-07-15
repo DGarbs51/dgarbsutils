@@ -56,7 +56,7 @@ def dynamodb_put_item(table_name, data):
     logger.info("boto3 dynamodb client created")
 
     try:
-        c.put_item(Table=table_name,Item=data)
+        c.put_item(TableName=table_name, Item=data)
     except botocore.exceptions.ClientError as e:
         logger.exception("error while putting the item to dynamodb")
         raise e
