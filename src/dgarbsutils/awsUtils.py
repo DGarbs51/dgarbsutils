@@ -18,26 +18,45 @@ def dynamodb_generate_json_from_csv_in_s3(bucket, key, delimiter=","):
     logger.info(f"file: {file}")
     data = utils.make_json_from_csv(file, delimiter)
     logger.debug(f"data: {data}")
-    keys = list(data[0])
-    logger.debug(f"keys: {keys}")
 
     output = []
     for row in data:
-        logger.debug(f"row: {row}")
-        item = {}
-        for key in keys:
-            logger.debug(f"key: {key}")
-            if " ".join(row[key].split()) == "":
-                item[key] = {"NULL": True}
-                continue
-            item[key] = {"S": " ".join(row[key].split())}
-            logger.debug(f"item['{key}']: {item[key]}")
+        item = dynamodb_format_json(row)
         output.append(item)
         logger.debug(f"item: {item}")
 
     os.remove(file)
     return output
 
+def dynamodb_translate_data_type(data):
+    data_type = str(type(data))
+
+    if data_type == "<class 'str'>":
+        if " ".join(data.split()) == "":
+            return "NULL"
+        return "S"
+    if data_type in ["<class 'int'>", "<class 'float'>", "<class 'complex'>"]:
+        return "N"
+    if data_type == "<class 'list'>":
+        return "L"
+    if data_type == "<class 'dict'>":
+        return "M"
+    if data_type == "<class 'bool'>":
+        return "BOOL"
+    if data_type == "<class 'NoneType'>":
+        return "NULL"
+
+
+def dynamodb_format_json(data):
+    """formats the dynamodb json"""
+    logger.debug(f"dynamodb_format_json('{data}') called")
+
+    output = {}
+    keys = list(data.keys())
+    for key in keys:
+        print(data[key])
+        output[key] = {dynamodb_translate_data_type(data[key]): data[key]}
+    return output
 
 def dynamodb_add_nested_json(pk_name, pk_value, data):
     """generates the nested data to add to a dynamodb item"""
