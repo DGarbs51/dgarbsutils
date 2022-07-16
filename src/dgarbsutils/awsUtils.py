@@ -1,8 +1,10 @@
-import os
-import boto3
 import logging
-import botocore
+import os
 import tempfile
+
+import boto3
+import botocore
+
 from . import utils
 
 # declare the logging object
@@ -28,6 +30,7 @@ def dynamodb_generate_json_from_csv_in_s3(bucket, key, delimiter=","):
     os.remove(file)
     return output
 
+
 def dynamodb_translate_data_type(data):
 
     data_type = str(type(data))
@@ -47,6 +50,7 @@ def dynamodb_translate_data_type(data):
     if data_type == "<class 'NoneType'>":
         return {"NULL": True}
 
+
 def dynamodb_put_item(table_name, data):
     """puts an item to dynamodb"""
     logger.debug(f'dynamodb_put_item("{table_name}", "{data}") called')
@@ -63,6 +67,7 @@ def dynamodb_put_item(table_name, data):
     else:
         logger.info(f"{data} put to {table_name}")
 
+
 def dynamodb_format_json(data):
     """formats the dynamodb json"""
     logger.debug(f"dynamodb_format_json('{data}') called")
@@ -72,6 +77,7 @@ def dynamodb_format_json(data):
     for key in keys:
         output[key] = dynamodb_translate_data_type(data[key])
     return output
+
 
 def dynamodb_add_nested_json(pk_name, pk_value, data):
     """generates the nested data to add to a dynamodb item"""
@@ -83,7 +89,7 @@ def dynamodb_add_nested_json(pk_name, pk_value, data):
     return output
 
 
-def sqs_delete_message(receipt_handle,queue_url):
+def sqs_delete_message(receipt_handle, queue_url):
     """deletes a message from the SQS queue"""
     logger.debug(f"sqs_delete_message('{receipt_handle}') called")
 
@@ -105,7 +111,7 @@ def sqs_delete_message(receipt_handle,queue_url):
         logger.info(f"sqs message {receipt_handle} deleted")
 
 
-def sqs_send_message(body,queue_url,attributes=None):
+def sqs_send_message(body, queue_url, attributes=None):
     """sends a message to the SQS queue"""
     logger.debug('send_sqs_message("body") called')
 
