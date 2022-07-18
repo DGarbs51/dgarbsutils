@@ -78,37 +78,41 @@ def get_file_extension(file):
     return extension
 
 
-def execute_pgsql_query(sql, host=None, port=None, user=None, password=None, dbname=None, secrets_manager_key=None):
-    """executes a psql query"""
-    logger.debug(
-        f"execute_pgsql_query('{sql}','{host}','{port}','{user}','password','{dbname}',''{secrets_manager_key}) called"
-    )
+class Postgres:
+    def __init__(self, secrets_manager_key=None, host=None, port=None, user=None, password=None, dbname=None):
+        self.secrets_manager_key = secrets_manager_key
+        if self.secrets_manager_key:
+            secret = json.loads(awsUtils.secrets_manager_get_secret(self.secrets_manager_key))
+            host = secret["host"]
+            port = secret["port"]
+            dbname = secret["dbname"]
+            user = secret["username"]
+            password = secret["password"]
+        else:
+            host = host
+            port = port
+            dbname = dbname
+            user = user
+            password = password
 
-    if secrets_manager_key:
-        secret = json.loads(awsUtils.secrets_manager_get_secret(secrets_manager_key))
-        host = secret["host"]
-        logger.debug(f"host: {host}")
-        port = secret["port"]
-        logger.debug(f"port: {port}")
-        dbname = secret["dbname"]
-        logger.debug(f"dbname: {dbname}")
-        user = secret["username"]
-        logger.debug(f"user: {user}")
-        password = secret["password"]
+        self.conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+        self.cursor = self.conn.cursor()
 
-    conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
-    cur = conn.cursor()
-    try:
-        cur.execute(sql)
-    except psycopg2.Error as e:
-        return str(e)
-    else:
-        conn.commit()
-        # fetch the column names
-        columns = [desc[0] for desc in cur.description]
-        results = [dict(zip(columns, row)) for row in cur.fetchall()]
+    def execute_pgsql_query(self, sql):
+        """executes a psql query"""
+        cur = self.conn.cursor()
+        try:
+            cur.execute(sql)
+        except psycopg2.Error as e:
+            return str(e)
+        else:
+            self.conn.commit()
+            if cur.description:
+                columns = [desc[0] for desc in cur.description]
+                results = [dict(zip(columns, row)) for row in cur.fetchall()]
+                return results
+        finally:
+            cur.close()
 
-        return results
-    finally:
-        cur.close()
-        conn.close()
+    def close(self):
+        self.conn.close()
