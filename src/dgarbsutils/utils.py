@@ -41,7 +41,7 @@ def make_csv_from_json(file, data, delimiter=None, keys=None):
     if not delimiter:
         delimiter = "|"
 
-    with open(file, "w") as f:
+    with open(file, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=keys, delimiter=delimiter)
         w.writeheader()
         w.writerows(data)
