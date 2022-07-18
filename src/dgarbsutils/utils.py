@@ -16,7 +16,9 @@ def get_content_type(extension):
     logger.debug(f"get_content_type('{extension}') called")
 
     if extension == "xlsx":
-        content_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        content_type = (
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
     elif extension == "png":
         content_type = "image/png"
     elif extension == "jpg":
@@ -78,7 +80,15 @@ def get_file_extension(file):
     return extension
 
 
-def execute_pgsql_query(sql, host=None, port=None, user=None, password=None, dbname=None, secrets_manager_key=None):
+def execute_pgsql_query(
+    sql,
+    host=None,
+    port=None,
+    user=None,
+    password=None,
+    dbname=None,
+    secrets_manager_key=None,
+):
     """executes a psql query"""
     logger.debug(
         f"execute_pgsql_query('{sql}','{host}','{port}','{user}','password','{dbname}',''{secrets_manager_key}) called"
@@ -96,7 +106,9 @@ def execute_pgsql_query(sql, host=None, port=None, user=None, password=None, dbn
         logger.debug(f"user: {user}")
         password = secret["password"]
 
-    conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+    conn = psycopg2.connect(
+        dbname=dbname, user=user, password=password, host=host, port=port
+    )
     cur = conn.cursor()
     try:
         cur.execute(sql)
