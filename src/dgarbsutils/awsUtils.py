@@ -51,6 +51,25 @@ def dynamodb_translate_data_type(data):
         return {"NULL": True}
 
 
+def dynamodb_convert_to_json(data):
+
+    output = {}
+    for key, inner in data.items():
+        for type, value in inner.items():
+            if type == "M":
+                output[key] = dynamodb_convert_to_json(value)
+            elif type == "L":
+                out = []
+                for items in value:
+                    for list_type, list_value in items.items():
+                        out.append(list_value)
+                output[key] = out
+            else:
+                output[key] = value
+
+    return output
+
+
 def dynamodb_put_item(table_name, data):
     """puts an item to dynamodb"""
     logger.debug(f'dynamodb_put_item("{table_name}", "{data}") called')
