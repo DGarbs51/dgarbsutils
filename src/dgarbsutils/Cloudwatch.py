@@ -14,7 +14,7 @@ class Cloudwatch:
 
         self._region = region
         if profile:
-            self._session = boto3.session.Session(profile_name=self.profile, region_name=self._region)
+            self._session = boto3.session.Session(profile_name=profile, region_name=self._region)
         else:
             self._session = boto3.session.Session(region_name=self._region)
         self._client = self._session.client("logs")
@@ -48,8 +48,7 @@ class Cloudwatch:
         while response == None or response["status"] == "Running":
             logger.info("Waiting for query to complete ...")
             time.sleep(1)
-
-        return query_id
+            return query_id
 
     def get_query_results(self, query_id):
         response = self._client.get_query_results(queryId=query_id)
