@@ -108,10 +108,13 @@ class DynamoDB:
 
         return output
 
-    def dynamodb_update_item(self, key_fields, update_fields):
+    def dynamodb_update_item(self, key_fields, update_fields, start_key=None):
 
         Key = self.dynamodb_format_json(key_fields)
         Names = {}
+        if start_key:
+            rand_start = utils.randStr()
+            Names[f"#{rand_start}"] = start_key
         Values = {}
         Expression = "SET "
         for update_field in update_fields:
@@ -120,7 +123,10 @@ class DynamoDB:
             for y, z in x.items():
                 Names[f"#{random_str}"] = y
                 Values[f":{random_str}"] = z
-                Expression += f"#{random_str} = :{random_str}, "
+                if not start_key:
+                    Expression += f"#{random_str} = :{random_str}, "
+                else:
+                    Expression += f"#{rand_start}.#{rand_start} = :{random_str}, "
 
         Expression = Expression.rstrip(", ")
 
