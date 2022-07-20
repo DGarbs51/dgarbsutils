@@ -1,6 +1,8 @@
 import csv
 import json
 import logging
+import random
+import string
 
 import psycopg2
 
@@ -76,6 +78,10 @@ def get_file_extension(file):
     extension = file.split(".")[-1]
 
     return extension
+
+
+def randStr(chars=string.ascii_letters + string.digits, N=2):
+    return "".join(random.choice(chars) for _ in range(N))
 
 
 class Postgres:
