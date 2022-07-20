@@ -7,3 +7,4 @@ rm -rf deploy
 pip install --target="deploy/python" dgarbsutils
 cd deploy
 zip -r python.zip python
+#python3 /home/ec2-user/code/cicd-infrastructure/init/get-token/saml_get_token.py both
