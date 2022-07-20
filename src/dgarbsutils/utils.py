@@ -3,6 +3,7 @@ import json
 import logging
 import random
 import string
+import sys
 
 import psycopg2
 
@@ -62,6 +63,7 @@ def make_json_from_csv(file, delimiter):
         logger.error(message)
         raise Exception(message)
 
+    csv.field_size_limit(sys.maxsize)
     # open file and read in as csv
     f = open(file, "r")
     csv_reader = csv.DictReader(f, delimiter=delimiter)
