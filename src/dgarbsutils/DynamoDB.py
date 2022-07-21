@@ -15,7 +15,9 @@ class DynamoDB:
     def __init__(self, table_name, profile=None, region="us-east-1"):
         self._region = region
         if profile:
-            self._session = boto3.session.Session(profile_name=profile, region_name=self._region)
+            self._session = boto3.session.Session(
+                profile_name=profile, region_name=self._region
+            )
         else:
             self._session = boto3.session.Session(region_name=self._region)
         self._client = self._session.client("dynamodb")
@@ -51,7 +53,12 @@ class DynamoDB:
         if data_type == "<class 'list'>":
             return {"L": [self.dynamodb_translate_data_type(item) for item in data]}
         if data_type == "<class 'dict'>":
-            return {"M": {key: self.dynamodb_translate_data_type(value) for key, value in data.items()}}
+            return {
+                "M": {
+                    key: self.dynamodb_translate_data_type(value)
+                    for key, value in data.items()
+                }
+            }
         if data_type == "<class 'bool'>":
             return {"BOOL": data}
         if data_type == "<class 'NoneType'>":
