@@ -45,7 +45,9 @@ def sqs_send_message(body, queue_url, attributes=None):
 
     try:
         # send the message to the SQS Queue
-        c.send_message(QueueUrl=queue_url, MessageBody=body, MessageAttributes=attributes)
+        c.send_message(
+            QueueUrl=queue_url, MessageBody=body, MessageAttributes=attributes
+        )
     except botocore.exceptions.ClientError as e:
         if e.response["Error"]["Code"] == "AWS.SimpleQueueService.NonExistentQueue":
             logger.error(f"The queue {queue_url} does not exist")
@@ -78,7 +80,9 @@ def secrets_manager_get_secret(secret):
         elif e.response["Error"]["Code"] == "InvalidParameterException":
             logger.error(f"The request had invalid params: {e}")
         elif e.response["Error"]["Code"] == "DecryptionFailure":
-            logger.error(f"The requested secret can't be decrypted using the provided KMS key: {e}")
+            logger.error(
+                f"The requested secret can't be decrypted using the provided KMS key: {e}"
+            )
         elif e.response["Error"]["Code"] == "InternalServiceError":
             logger.error(f"An error occurred on service side: {e}")
         else:
@@ -104,7 +108,9 @@ def s3_download(bucket, key):
     c = s.resource("s3")
     logger.info("boto3 s3 client created")
 
-    temp_file = tempfile.NamedTemporaryFile(suffix=f".{utils.get_file_extension(key)}", delete=False)
+    temp_file = tempfile.NamedTemporaryFile(
+        suffix=f".{utils.get_file_extension(key)}", delete=False
+    )
     local_path = temp_file.name
 
     try:
