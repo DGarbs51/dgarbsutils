@@ -126,7 +126,7 @@ class DynamoDB:
                 if not start_key:
                     Expression += f"#{random_str} = :{random_str}, "
                 else:
-                    Expression += f"#{rand_start}.#{rand_start} = :{random_str}, "
+                    Expression += f"#{rand_start}.#{random_str} = :{random_str}, "
 
         Expression = Expression.rstrip(", ")
 
