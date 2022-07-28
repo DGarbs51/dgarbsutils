@@ -1,6 +1,7 @@
 import logging
 import os
 import tempfile
+from urllib.parse import unquote_plus
 
 import boto3
 import botocore
@@ -99,6 +100,8 @@ def secrets_manager_get_secret(secret):
 def s3_download(bucket, key):
     """downloads a file from s3"""
     logger.debug(f's3_download("{bucket}", "{key}") called')
+
+    key = unquote_plus(key)
 
     s = boto3.session.Session()
     c = s.resource("s3")
