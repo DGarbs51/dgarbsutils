@@ -45,7 +45,7 @@ class Cloudwatch:
 
         response = None
 
-        while response == None or response["status"] == "Running":
+        while response is None or response["status"] == "Running":
             logger.info("Waiting for query to complete ...")
             time.sleep(1)
             return query_id
