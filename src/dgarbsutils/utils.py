@@ -68,9 +68,9 @@ def make_json_from_csv(file, delimiter):
     f = open(file, "r")
     csv_reader = csv.DictReader(f, delimiter=delimiter)
     # loop through each row and convert to json objects in an array
-    json = list(csv_reader)
+    output = list(csv_reader)
 
-    return json
+    return output
 
 
 def get_file_extension(file):

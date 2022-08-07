@@ -60,15 +60,15 @@ class DynamoDB:
         """converts the dynamodb json to a python json"""
         output = {}
         for key, inner in data.items():
-            for type, value in inner.items():
-                if type == "M":
+            for data_type, value in inner.items():
+                if data_type == "M":
                     output[key] = self.dynamodb_convert_to_json(value)
-                elif type == "NULL":
+                elif data_type == "NULL":
                     output[key] = None
-                elif type in ["L", "NS", "BS", "SS"]:
+                elif data_type in ["L", "NS", "BS", "SS"]:
                     out = []
                     for items in value:
-                        for list_type, list_value in items.items():
+                        for _, list_value in items.items():
                             out.append(list_value)
                     output[key] = out
                 else:
@@ -98,6 +98,7 @@ class DynamoDB:
             output[key] = self.dynamodb_translate_data_type(data[key])
         return output
 
+    @staticmethod
     def dynamodb_add_nested_json(pk_name, pk_value, data):
         """generates the nested data to add to a dynamodb item"""
         output = []
