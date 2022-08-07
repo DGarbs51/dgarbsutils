@@ -55,6 +55,7 @@ class DynamoDB:
             return {"BOOL": data}
         if data_type == "<class 'NoneType'>":
             return {"NULL": True}
+        return None
 
     def dynamodb_convert_to_json(self, data):
         """converts the dynamodb json to a python json"""

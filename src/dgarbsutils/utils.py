@@ -116,5 +116,7 @@ class Postgres:
         finally:
             cur.close()
 
+        return None
+
     def close(self):
         self.conn.close()
