@@ -54,7 +54,7 @@ class Cloudwatch:
         return response
 
     @staticmethod
-    def convert_results_to_json(self, response):
+    def convert_results_to_json(response):
         items = []
         for result in response["results"]:
             item = {}
