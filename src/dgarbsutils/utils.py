@@ -97,11 +97,7 @@ class Postgres:
             user = secret["username"]
             password = secret["password"]
         else:
-            host = host
-            port = port
-            dbname = dbname
-            user = user
-            password = password
+            pass
 
         self.conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
         self.cursor = self.conn.cursor()
