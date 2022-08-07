@@ -15,7 +15,14 @@ logger.setLevel(logging.INFO)
 
 
 def get_content_type(extension):
-    """gets the content type for a file extension"""
+    """
+    Returns the content type for a file extension.
+
+        Parameters:
+            extension (str): the file extension
+        Returns:
+            content_type (str): the content type for the file extension
+    """
     logger.debug(f"get_content_type('{extension}') called")
 
     if extension == "xlsx":
@@ -36,7 +43,18 @@ def get_content_type(extension):
 
 
 def make_csv_from_json(file, data, delimiter=None, keys=None):
-    """makes a csv file from a json string"""
+    """
+    Returns the full file path and delimiter for a csv file from a json string
+
+        Parameters:
+            file (str): The full path to the file to write to.
+            data (str): The json string to convert to csv.
+            delimiter (str, optional): The delimiter to use. Defaults to None.
+            keys (list, optional): The keys to use in the csv file. Defaults to None.
+        Returns:
+            file (str): the full path to the file to write to
+            delimiter (str): the delimiter the csv file used
+    """
     logger.debug(f"make_csv_from_json('{file}','{data}','{delimiter}','{keys}') called")
 
     if not keys:
@@ -55,7 +73,16 @@ def make_csv_from_json(file, data, delimiter=None, keys=None):
 
 
 def make_json_from_csv(file, delimiter):
-    """makes a json string from a csv file"""
+    """
+    Returns a json string from a csv file
+
+        Parameters:
+            file (str): the full path to the file to read
+            delimiter (str): the delimiter to use
+
+        Returns:
+            json (list): the json array of rows from the csv file
+    """
     logger.debug(f"make_json_from_csv('{file}', '{delimiter}') called")
 
     if get_file_extension(file) not in ["txt", "csv", "ppe"]:
@@ -74,7 +101,15 @@ def make_json_from_csv(file, delimiter):
 
 
 def get_file_extension(file):
-    """gets the file extension"""
+    """
+    Returns the file extension from a file name
+
+        Parameters:
+            file (str): the full path to the file to extract the extension from
+
+        Returns:
+            extension (str): the file extension
+    """
     logger.debug(f"get_file_extension('{file}') called")
 
     extension = file.split(".")[-1]
@@ -83,6 +118,16 @@ def get_file_extension(file):
 
 
 def randStr(chars=string.ascii_letters + string.digits, N=2):
+    """
+    Returns a random string of length N generated from the chars parameter
+
+        Parameters:
+            chars (list, optional): List of charachters to use for generation. Defaults to string.ascii_letters+string.digits.
+            N (int, optional): Length of string generated. Defaults to 2.
+
+        Returns:
+            (str): Random string of length N using chars
+    """
     return "".join(random.choice(chars) for _ in range(N))
 
 
