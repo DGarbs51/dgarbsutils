@@ -23,7 +23,6 @@ class DynamoDB:
 
     def dynamodb_generate_json_from_csv_in_s3(self, bucket, key, delimiter=","):
         """takes a bucket and key and returns a dynamodb json formatted payload"""
-
         file = awsUtils.s3_download(bucket, key)
         logger.info(f"file: {file}")
         data = utils.make_json_from_csv(file, delimiter)

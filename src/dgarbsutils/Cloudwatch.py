@@ -22,7 +22,6 @@ class Cloudwatch:
 
     def start_query(self, query, start_time=None, end_time=None):
         """Query CloudWatch Logs and return the results as a JSON string."""
-
         if start_time is None:
             start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         else:
