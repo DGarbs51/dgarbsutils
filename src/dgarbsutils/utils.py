@@ -35,6 +35,8 @@ def get_content_type(extension):
         content_type = "image/jpeg"
     elif extension == "pdf":
         content_type = "application/pdf"
+    elif extension == "eml":
+        content_type = "binary/octet-stream"
     else:
         return None
 
