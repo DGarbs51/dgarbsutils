@@ -139,3 +139,14 @@ def s3_upload(bucket, key, local_path):
         raise e
     else:
         logger.info(f"{local_path} uploaded to {bucket}/{key}")
+
+
+def s3_object_summary(bucket, key):
+    """gets metadata of object in s3"""
+    logger.debug(f's3_object_summary("{bucket}", "{key}") called')
+
+    s = boto3.session.Session()
+    c = s.resource("s3")
+    logger.info("boto3 s3 client created")
+    object_summary = c.ObjectSummary(bucket, key)
+    return object_summary
