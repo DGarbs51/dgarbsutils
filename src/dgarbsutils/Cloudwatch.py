@@ -14,7 +14,9 @@ class Cloudwatch:
 
         self._region = region
         if profile:
-            self._session = boto3.session.Session(profile_name=profile, region_name=self._region)
+            self._session = boto3.session.Session(
+                profile_name=profile, region_name=self._region
+            )
         else:
             self._session = boto3.session.Session(region_name=self._region)
         self._client = self._session.client("logs")
@@ -23,7 +25,9 @@ class Cloudwatch:
     def start_query(self, query, start_time=None, end_time=None):
         """Query CloudWatch Logs and return the results as a JSON string."""
         if start_time is None:
-            start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            start_time = datetime.now().replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
         else:
             start_time = datetime.strptime(start_time, "%Y-%m-%d")
 
