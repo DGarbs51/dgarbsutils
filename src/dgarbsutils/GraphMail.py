@@ -8,7 +8,7 @@ import urllib3
 urllib3.disable_warnings()
 
 
-class Graph:
+class GraphMail:
     def __init__(self, tenant=None, client_id=None, secret=None, base_url=None, **kwargs):
 
         self.tenantID = tenant if tenant else os.getenv("AZURE_TENANT_ID")
@@ -73,6 +73,13 @@ class Graph:
         request = requests.request("get", url, headers=headers, params=params, verify=False)
         response = request.content
         return response
+
+    def postSendMail(self, _emailBox, _body):
+        url = f"{self._baseUrl}/v1.0/users/{_emailBox}/sendMail"
+        headers = {"Authorization": f"Bearer {self.accessToken}", "Content-Type": "application/json"}
+        payload = json.dumps(_body)
+        request = requests.request("post", url, headers=headers, data=payload, verify=False)
+        return request
 
     def getMailFolders(self, _emailBox):
         url = f"{self._baseUrl}/v1.0/users/{_emailBox}/mailFolders"
