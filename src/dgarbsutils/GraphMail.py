@@ -9,7 +9,9 @@ urllib3.disable_warnings()
 
 
 class Graph:
-    def __init__(self, tenant=None, client_id=None, secret=None, base_url=None, **kwargs):
+    def __init__(
+        self, tenant=None, client_id=None, secret=None, base_url=None, **kwargs
+    ):
 
         self.tenantID = tenant if tenant else os.getenv("AZURE_TENANT_ID")
         self.clientID = client_id if client_id else os.getenv("AZURE_EMAIL_CLIENT_ID")
@@ -37,7 +39,9 @@ class Graph:
             "grant_type": "client_credentials",
             "scope": f"{self._baseUrl}/.default",
         }
-        request = requests.request("post", url, headers=headers, data=payload, verify=False)
+        request = requests.request(
+            "post", url, headers=headers, data=payload, verify=False
+        )
         response = request.json()
         return response
 
@@ -61,7 +65,9 @@ class Graph:
 
             url = f"{self._baseUrl}/v1.0/users/{_emailBox}/mailFolders/{_folderId}/messages"
 
-        request = requests.request("get", url, headers=headers, params=params, verify=False)
+        request = requests.request(
+            "get", url, headers=headers, params=params, verify=False
+        )
         response = request.json()
 
         return response
@@ -70,7 +76,9 @@ class Graph:
         url = f"{self._baseUrl}/v1.0/users/{_emailBox}/messages/{_id}/$value"
         headers = {"Authorization": f"Bearer {self.accessToken}"}
         params = {}
-        request = requests.request("get", url, headers=headers, params=params, verify=False)
+        request = requests.request(
+            "get", url, headers=headers, params=params, verify=False
+        )
         response = request.content
         return response
 
@@ -78,7 +86,9 @@ class Graph:
         url = f"{self._baseUrl}/v1.0/users/{_emailBox}/mailFolders"
         headers = {"Authorization": f"Bearer {self.accessToken}"}
         params = {"includeHiddenFolders": True}
-        request = requests.request("get", url, headers=headers, params=params, verify=False)
+        request = requests.request(
+            "get", url, headers=headers, params=params, verify=False
+        )
         response = request.json()
         return response
 
@@ -92,8 +102,13 @@ class Graph:
                 break
 
         url = f"{self._baseUrl}/v1.0/users/{_emailBox}/messages/{_id}/move"
-        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {self.accessToken}"}
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.accessToken}",
+        }
         payload = json.dumps({"destinationId": _folderId})
-        request = requests.request("post", url, headers=headers, data=payload, verify=False)
+        request = requests.request(
+            "post", url, headers=headers, data=payload, verify=False
+        )
 
         return request
