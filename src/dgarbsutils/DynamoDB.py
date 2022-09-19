@@ -89,6 +89,21 @@ class DynamoDB:
         else:
             logger.info(f"{data} put to {self._table_name}")
 
+    def dynamodb_get_item(self, key_fields):
+        """gets an item to dynamodb"""
+        logger.debug(f'dynamodb_get_item( "{key_fields}") called')
+
+        Key = self.dynamodb_format_json(key_fields)
+
+        try:
+            response = self._client.get_item(TableName=self._table_name, Key=Key)
+        except botocore.exceptions.ClientError as e:
+            logger.exception("error while getting the item from dynamodb")
+            raise e
+        else:
+            logger.info(f"{response} from {self._table_name}")
+            return response
+
     def dynamodb_format_json(self, data):
         """converts the python json to a dynamodb json"""
         logger.debug(f"dynamodb_format_json('{data}') called")
