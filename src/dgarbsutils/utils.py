@@ -74,7 +74,7 @@ def make_csv_from_json(file, data, delimiter=None, keys=None):
     return file, delimiter
 
 
-def make_json_from_csv(file, delimiter):
+def make_json_from_csv(file, delimiter, encoding="utf-8"):
     """
     Returns a json string from a csv file
 
@@ -94,7 +94,7 @@ def make_json_from_csv(file, delimiter):
 
     csv.field_size_limit(sys.maxsize)
     # open file and read in as csv
-    f = open(file, "r")
+    f = open(file, "r", encoding=encoding)
     csv_reader = csv.DictReader(f, delimiter=delimiter)
     # loop through each row and convert to json objects in an array
     output = list(csv_reader)
