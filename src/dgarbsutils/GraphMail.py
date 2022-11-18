@@ -41,23 +41,50 @@ class GraphMail:
         response = request.json()
         return response
 
-    def getMailBySearch(self, _search, _emailBox, folder=None):
-        url = f"{self._baseUrl}/v1.0/users/{_emailBox}/messages"
+    def getListAttachments(self, _emailBox, _email_id, _folder=None):
+        url = f"{self._baseUrl}/v1.0/users/{_emailBox}/messages/{_email_id}/attachments"
         headers = {"Authorization": f"Bearer {self.accessToken}"}
         params = {}
-        if _search:
-            params = {
-                "search": _search,
-            }
-        if folder:
+        _folderId = None
+        if _folder:
             data = self.getMailFolders(_emailBox)
 
             for folders in data["value"]:
-                if folders["displayName"] == folder:
+                if folders["displayName"] == _folder:
                     _folderId = folders["id"]
                     break
 
-            # TODO - Add error handling if folder not found
+            if not _folderId:
+                return {"statusCode": 404, "message": "Folder not found"}
+
+            url = f"{self._baseUrl}/v1.0/users/{_emailBox}/mailFolders/{_folderId}/messages/{_email_id}/attachments"
+
+        request = requests.request("get", url, headers=headers, params=params, verify=False)
+        response = request.json()
+
+        return response
+
+    def getMailBySearch(self, _search, _emailBox, _folder=None, _select=None):
+        url = f"{self._baseUrl}/v1.0/users/{_emailBox}/messages"
+        headers = {"Authorization": f"Bearer {self.accessToken}"}
+        params = {}
+        _folderId = None
+        if _search:
+            params["$search"] = _search
+
+        if _select:
+            params["$select"] = _select
+
+        if _folder:
+            data = self.getMailFolders(_emailBox)
+
+            for folders in data["value"]:
+                if folders["displayName"] == _folder:
+                    _folderId = folders["id"]
+                    break
+
+            if not _folderId:
+                return {"statusCode": 404, "message": "Folder not found"}
 
             url = f"{self._baseUrl}/v1.0/users/{_emailBox}/mailFolders/{_folderId}/messages"
 
