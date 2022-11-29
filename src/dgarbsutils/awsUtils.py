@@ -150,3 +150,15 @@ def s3_object_summary(bucket, key):
     logger.info("boto3 s3 client created")
     object_summary = c.ObjectSummary(bucket, key)
     return object_summary
+
+
+def s3_list_objects(bucket, prefix):
+    """lists objects in s3"""
+    logger.debug(f's3_list_objects("{bucket}", "{prefix}") called')
+
+    s = boto3.session.Session()
+    c = s.resource("s3")
+    logger.info("boto3 s3 client created")
+    bucket = c.Bucket(bucket)
+    objects = bucket.objects.filter(Prefix=prefix)
+    return objects
