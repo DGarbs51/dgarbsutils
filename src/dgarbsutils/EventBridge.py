@@ -12,7 +12,9 @@ class EventBridge:
     def __init__(self, profile=None, region="us-east-1"):
         self._region = region
         if profile:
-            self._session = boto3.session.Session(profile_name=profile, region_name=self._region)
+            self._session = boto3.session.Session(
+                profile_name=profile, region_name=self._region
+            )
         else:
             self._session = boto3.session.Session(region_name=self._region)
         self._client = self._session.client("events")
@@ -23,7 +25,9 @@ class EventBridge:
             if not event_bus_name:
                 response = self._client.enable_rule(Name=rule_name)
             else:
-                response = self._client.enable_rule(Name=rule_name, EventBusName=event_bus_name)
+                response = self._client.enable_rule(
+                    Name=rule_name, EventBusName=event_bus_name
+                )
             logger.info(f"response: {response}")
             return response
         except botocore.exceptions.ClientError as error:
@@ -36,7 +40,9 @@ class EventBridge:
             if not event_bus_name:
                 response = self._client.disable_rule(Name=rule_name)
             else:
-                response = self._client.disable_rule(Name=rule_name, EventBusName=event_bus_name)
+                response = self._client.disable_rule(
+                    Name=rule_name, EventBusName=event_bus_name
+                )
             logger.info(f"response: {response}")
             return response
         except botocore.exceptions.ClientError as error:
@@ -47,7 +53,10 @@ class EventBridge:
         """lists the rules"""
         try:
             response = self._client.list_rules(
-                NamePrefix=prefix, EventBusName=event_bus_name, NextToken=next_token, Limit=limit
+                NamePrefix=prefix,
+                EventBusName=event_bus_name,
+                NextToken=next_token,
+                Limit=limit,
             )
             logger.info(f"response: {response}")
             return response
