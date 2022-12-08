@@ -14,6 +14,14 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
+def clean_filename(name, length=255):
+    forbidden_chars = "\"*\\/'.|?:<>"
+    filename = "".join([x if x not in forbidden_chars else "" for x in name])
+    if len(filename) > length:
+        filename = filename[: (length - 3)] + "..."
+    return filename
+
+
 def get_content_type(extension):
     """
     Returns the content type for a file extension.
@@ -91,7 +99,15 @@ def make_json_from_csv(file, delimiter, encoding="utf-8"):
         logger.error(message)
         raise Exception(message)
 
-    csv.field_size_limit(sys.maxsize)
+    maxInt = sys.maxsize
+
+    while True:
+        try:
+            csv.field_size_limit(maxInt)
+            break
+        except OverflowError:
+            maxInt = int(maxInt / 10)
+
     # open file and read in as csv
     with open(file, "r", encoding=encoding) as f:
         csv_reader = csv.DictReader(f, delimiter=delimiter)
