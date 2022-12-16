@@ -13,11 +13,13 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-def sqs_delete_message(receipt_handle, queue_url):
+def sqs_delete_message(receipt_handle, queue_url, profile=None):
     """deletes a message from the SQS queue"""
     logger.debug(f"sqs_delete_message('{receipt_handle}') called")
 
     s = boto3.session.Session()
+    if profile:
+        s = boto3.session.Session(profile_name=profile)
     c = s.client(
         service_name="sqs",
         region_name=os.environ["AWS_REGION"],
@@ -35,12 +37,14 @@ def sqs_delete_message(receipt_handle, queue_url):
         logger.info(f"sqs message {receipt_handle} deleted")
 
 
-def sqs_send_message(body, queue_url, attributes=None):
+def sqs_send_message(body, queue_url, attributes=None, profile=None):
     """sends a message to the SQS queue"""
     logger.debug('send_sqs_message("body") called')
 
     # establich a boto3 client for SQS
     s = boto3.session.Session()
+    if profile:
+        s = boto3.session.Session(profile_name=profile)
     c = s.client("sqs")
     logger.info("boto3 sqs client created")
 
@@ -56,13 +60,15 @@ def sqs_send_message(body, queue_url, attributes=None):
         logger.info("sqs message sent")
 
 
-def secrets_manager_get_secret(secret):
+def secrets_manager_get_secret(secret, profile=None):
     """gets the secret from the secrets manager"""
     logger.debug(f'secrets_manager_get_secret("{secret}") called')
 
     secret_name = secret
 
     s = boto3.session.Session()
+    if profile:
+        s = boto3.session.Session(profile_name=profile)
     c = s.client(
         service_name="secretsmanager",
         region_name=os.environ["AWS_REGION"],
@@ -97,13 +103,15 @@ def secrets_manager_get_secret(secret):
     return None
 
 
-def s3_download(bucket, key):
+def s3_download(bucket, key, profile=None):
     """downloads a file from s3"""
     logger.debug(f's3_download("{bucket}", "{key}") called')
 
     key = unquote_plus(key)
 
     s = boto3.session.Session()
+    if profile:
+        s = boto3.session.Session(profile_name=profile)
     c = s.resource("s3")
     logger.info("boto3 s3 client created")
 
@@ -124,11 +132,13 @@ def s3_download(bucket, key):
     return None
 
 
-def s3_upload(bucket, key, local_path):
+def s3_upload(bucket, key, local_path, profile=None):
     """uploads a file to s3"""
     logger.debug(f's3_upload("{bucket}", "{key}", "{local_path}") called')
 
     s = boto3.session.Session()
+    if profile:
+        s = boto3.session.Session(profile_name=profile)
     c = s.resource("s3")
     logger.info("boto3 s3 client created")
 
@@ -141,22 +151,26 @@ def s3_upload(bucket, key, local_path):
         logger.info(f"{local_path} uploaded to {bucket}/{key}")
 
 
-def s3_object_summary(bucket, key):
+def s3_object_summary(bucket, key, profile=None):
     """gets metadata of object in s3"""
     logger.debug(f's3_object_summary("{bucket}", "{key}") called')
 
     s = boto3.session.Session()
+    if profile:
+        s = boto3.session.Session(profile_name=profile)
     c = s.resource("s3")
     logger.info("boto3 s3 client created")
     object_summary = c.ObjectSummary(bucket, key)
     return object_summary
 
 
-def s3_list_objects(bucket, prefix):
+def s3_list_objects(bucket, prefix, profile=None):
     """lists objects in s3"""
     logger.debug(f's3_list_objects("{bucket}", "{prefix}") called')
 
     s = boto3.session.Session()
+    if profile:
+        s = boto3.session.Session(profile_name=profile)
     c = s.resource("s3")
     logger.info("boto3 s3 client created")
     bucket = c.Bucket(bucket)
