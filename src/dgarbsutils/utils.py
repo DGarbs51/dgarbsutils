@@ -34,7 +34,9 @@ def get_content_type(extension):
     logger.debug(f"get_content_type('{extension}') called")
 
     if extension == "xlsx":
-        content_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        content_type = (
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
     elif extension == "png":
         content_type = "image/png"
     elif extension == "jpg":
@@ -151,17 +153,29 @@ def randStr(chars=string.ascii_letters + string.digits, N=2):
 
 
 class Postgres:
-    def __init__(self, secrets_manager_key=None, host=None, port=None, user=None, password=None, dbname=None):
+    def __init__(
+        self,
+        secrets_manager_key=None,
+        host=None,
+        port=None,
+        user=None,
+        password=None,
+        dbname=None,
+    ):
         self.secrets_manager_key = secrets_manager_key
         if self.secrets_manager_key:
-            secret = json.loads(awsUtils.secrets_manager_get_secret(self.secrets_manager_key))
+            secret = json.loads(
+                awsUtils.secrets_manager_get_secret(self.secrets_manager_key)
+            )
             host = secret["host"]
             port = secret["port"]
             dbname = secret["dbname"]
             user = secret["username"]
             password = secret["password"]
 
-        self.conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+        self.conn = psycopg2.connect(
+            dbname=dbname, user=user, password=password, host=host, port=port
+        )
         self.cursor = self.conn.cursor()
 
     def execute_pgsql_query(self, sql):
