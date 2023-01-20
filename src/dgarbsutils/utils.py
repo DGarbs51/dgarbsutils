@@ -151,10 +151,15 @@ def randStr(chars=string.ascii_letters + string.digits, N=2):
 
 
 class Postgres:
-    def __init__(self, secrets_manager_key=None, host=None, port=None, user=None, password=None, dbname=None):
+    def __init__(
+        self, secrets_manager_key=None, host=None, port=None, user=None, password=None, dbname=None, profile=None
+    ):
         self.secrets_manager_key = secrets_manager_key
         if self.secrets_manager_key:
-            secret = json.loads(awsUtils.secrets_manager_get_secret(self.secrets_manager_key))
+            if not profile:
+                secret = json.loads(awsUtils.secrets_manager_get_secret(self.secrets_manager_key))
+            else:
+                secret = json.loads(awsUtils.secrets_manager_get_secret(self.secrets_manager_key, profile=profile))
             host = secret["host"]
             port = secret["port"]
             dbname = secret["dbname"]
