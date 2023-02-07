@@ -117,13 +117,16 @@ class GraphMail:
         return response
 
     def postMoveEmails(self, _emailBox, _id, _destFolder):
-
+        _folderId = None
         data = self.getMailFolders(_emailBox)
 
         for folders in data["value"]:
             if folders["displayName"] == _destFolder:
                 _folderId = folders["id"]
                 break
+
+        if not _folderId:
+            return {"statusCode": 404, "message": "Folder not found"}
 
         url = f"{self._baseUrl}/v1.0/users/{_emailBox}/messages/{_id}/move"
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {self.accessToken}"}
