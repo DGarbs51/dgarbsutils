@@ -46,7 +46,7 @@ class DynamoDB:
                 return {"NULL": True}
             return {"S": " ".join(data.split())}
         if data_type in ["<class 'int'>", "<class 'float'>", "<class 'complex'>"]:
-            return {"N": data}
+            return {"N": str(data)}
         if data_type == "<class 'list'>":
             return {"L": [self.dynamodb_translate_data_type(item) for item in data]}
         if data_type == "<class 'dict'>":
