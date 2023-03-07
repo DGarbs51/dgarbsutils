@@ -93,6 +93,14 @@ class GraphMail:
 
         return response
 
+    def getMailBySearchNext(self, nextLink):
+        headers = {"Authorization": f"Bearer {self.accessToken}"}
+        params = {}
+        request = requests.request("get", nextLink, headers=headers, params=params, verify=False)
+        response = request.json()
+
+        return response
+
     def getMailBySearchRaw(self, _emailBox, _id=""):
         url = f"{self._baseUrl}/v1.0/users/{_emailBox}/messages/{_id}/$value"
         headers = {"Authorization": f"Bearer {self.accessToken}"}
