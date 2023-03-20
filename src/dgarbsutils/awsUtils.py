@@ -41,7 +41,7 @@ def sqs_send_message(body, queue_url, attributes=None, profile=None):
     """sends a message to the SQS queue"""
     logger.debug('send_sqs_message("body") called')
 
-    # establich a boto3 client for SQS
+    # establish a boto3 client for SQS
     s = boto3.session.Session()
     if profile:
         s = boto3.session.Session(profile_name=profile)
