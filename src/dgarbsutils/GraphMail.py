@@ -127,15 +127,42 @@ class GraphMail:
         response = request.json()
         return response
 
+    def getMailChildFolders(self, _emailBox, _folderId):
+        url = f"{self._baseUrl}/v1.0/users/{_emailBox}/mailFolders/{_folderId}/childFolders"
+        headers = {"Authorization": f"Bearer {self.accessToken}"}
+        params = {"includeHiddenFolders": True}
+        request = requests.request("get", url, headers=headers, params=params, verify=False)
+        response = request.json()
+        return response
+
     def postMoveEmails(self, _emailBox, _id, _destFolder):
         _folderId = None
         data = self.getMailFolders(_emailBox)
 
+        _destFolderArray = _destFolder.split("/")
         for folders in data["value"]:
-            if folders["displayName"] == _destFolder:
+            if folders["displayName"] == _destFolderArray[0]:
                 _folderId = folders["id"]
-                break
 
+        if len(_destFolderArray) > 1:
+            for i in range(1, len(_destFolderArray)):
+                # Get a list of emails that match the search criteria
+                folders = []
+                done = False
+                response = self.getMailChildFolders(_emailBox, _folderId)
+                while not done:
+                    for folder in response["value"]:
+                        folders.append(folder)
+                    if "@odata.nextLink" in response.keys():
+                        response = self.getMailBySearchNext(response["@odata.nextLink"])
+                    else:
+                        done = True
+                        break
+                    done = False
+                for folder in folders:
+                    if folder["displayName"] == _destFolderArray[i]:
+                        print(folder["displayName"])
+                        _folderId = folder["id"]
         if not _folderId:
             return {"statusCode": 404, "message": "Folder not found"}
 
