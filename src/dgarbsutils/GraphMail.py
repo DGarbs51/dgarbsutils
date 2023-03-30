@@ -64,13 +64,16 @@ class GraphMail:
 
         return response
 
-    def getMailBySearch(self, _search, _emailBox, _folder=None, _select=None):
+    def getMailBySearch(self, _search, _emailBox, _folder=None, _select=None, _filter=None):
         url = f"{self._baseUrl}/v1.0/users/{_emailBox}/messages"
         headers = {"Authorization": f"Bearer {self.accessToken}"}
         params = {}
         _folderId = None
         if _search:
             params["$search"] = _search
+
+        if _filter:
+            params["$filter"] = _filter
 
         if _select:
             params["$select"] = _select
