@@ -1,6 +1,7 @@
 import logging
 import os
 import tempfile
+from datetime import datetime, timedelta
 from urllib.parse import unquote_plus
 
 import boto3
@@ -176,3 +177,37 @@ def s3_list_objects(bucket, prefix, profile=None):
     bucket = c.Bucket(bucket)
     objects = bucket.objects.filter(Prefix=prefix)
     return objects
+
+
+def textract_get_in_flight_count():
+    values: list[str] = [
+        "StartDocumentAnalysis",
+        "StartDocumentTextDetection",
+        # "StartExpenseAnalysis",
+        # "StartLendingAnalysis",
+        "GetDocumentAnalysis",
+        "GetDocumentTextDetection",
+        # "GetExpenseAnalysis",
+        # "GetLendingAnalysis",
+        # "GetLendingAnalysisSummary",
+    ]
+    now: datetime = datetime.now()
+
+    c = boto3.client("cloudwatch")
+    current_count: int = 0
+    for value in values:
+        response = c.get_metric_statistics(
+            Namespace="AWS/Textract",
+            MetricName="ResponseTime",
+            Dimensions=[{"Name": "Operation", "Value": value}],
+            StartTime=now - timedelta(minutes=5),
+            EndTime=now,
+            Period=60,
+            Statistics=["SampleCount"],
+        )
+        for datapoint in response["Datapoints"]:
+            if datapoint["Timestamp"] == max([x["Timestamp"] for x in response["Datapoints"]]):
+                current_count += datapoint["SampleCount"]
+                break
+
+    return current_count

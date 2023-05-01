@@ -1,4 +1,6 @@
 cd ~/code/opensource/py-utils
+isort .
+black . --line-length=120
 python3 -m build
 python3 -m twine upload --repository pypi dist/*
 python3 -m twine upload --repository nexus dist/*
