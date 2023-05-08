@@ -11,7 +11,6 @@ logger.setLevel(logging.INFO)
 
 class Cloudwatch:
     def __init__(self, log_group, profile=None, region="us-east-1"):
-
         self._region = region
         if profile:
             self._session = boto3.session.Session(profile_name=profile, region_name=self._region)

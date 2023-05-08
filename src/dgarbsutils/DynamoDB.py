@@ -125,7 +125,6 @@ class DynamoDB:
         return output
 
     def dynamodb_update_item(self, key_fields, update_fields, start_key=None):
-
         Key = self.dynamodb_format_json(key_fields)
         Names = {}
         if start_key:

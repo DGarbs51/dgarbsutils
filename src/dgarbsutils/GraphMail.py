@@ -10,7 +10,6 @@ urllib3.disable_warnings()
 
 class GraphMail:
     def __init__(self, tenant=None, client_id=None, secret=None, base_url=None, **kwargs):
-
         self.tenantID = tenant if tenant else os.getenv("AZURE_TENANT_ID")
         self.clientID = client_id if client_id else os.getenv("AZURE_EMAIL_CLIENT_ID")
         self.clientSecret = secret if secret else os.getenv("AZURE_EMAIL_CLIENT_SECRET")
